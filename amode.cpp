@@ -7,14 +7,23 @@
 #include <algorithm>
 using namespace std;
 
-float **createDataMatrix(int numElement, int numSample)
-{
-    float *numElement;
+float **createDataMatrix(int numElement, int numSample) {
     float **RFData;
+    RFData = new float*[numElement];
+    for (int i = 0; i < numElement; i++)
+        RFData[i] = new float[numSample];
+    return RFData;
 }
 
-int loadRFData(float **RFData, const char *fileName, int numElement, int numSample)
-{
+int loadRFData(float **RFData, const char *fileName, int numElement, int numSample) {
+    ifstream infile("realRFData.txt");
+
+
+
+
+
+
+
     // Open the text file fileName, read the data and store into RFData
     // You can use the getline() command to extract the data lines from the txt files
 }
