@@ -16,8 +16,8 @@ float **createDataMatrix(int numElement, int numSample) {
 }
 
 int loadRFData(float **RFData, const char *fileName, int numElement, int numSample) {
-    ifstream infile("realRFData.txt");
-
+    ifstream infile("RealRFData.txt");
+    if 
 
 
 
