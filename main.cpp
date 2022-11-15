@@ -17,19 +17,16 @@ int main () {
     //Use this section to create your array of pointers, and the arrays the pointers point to.
     float **realRFData = createDataMatrix(N, K);
     float **imagRFData = createDataMatrix(N, K);
-
     int result = 0;
 
     //Use this section to input the data from the txt files. 
     result = loadRFData(realRFData, "RealRFData.txt", N, K);
-    if (result == -1)
-    {
+    if (result == -1) {
         cerr << "Cannot load from realRFData.txt, exiting program" << endl;
         return -1;
     }
     result = loadRFData(imagRFData, "ImagRFData.txt",N, K);
-    if (result == -1)
-    {
+    if (result == -1) {
         cerr << "Cannot load from imagRFData.txt, exiting program" << endl;
         return -1;
     }

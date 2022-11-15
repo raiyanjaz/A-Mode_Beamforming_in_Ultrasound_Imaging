@@ -5,6 +5,7 @@
 //      numElement: Number of desired elements
 //      numSample: Number of desired samples
 float ** createDataMatrix(int numElement, int numSample);
+
 // loadRFData - Populate the RFData array with data from input file
 //      **RFData: Input pointer to 2D data array
 //      *fileName: Input pointer to fileName array

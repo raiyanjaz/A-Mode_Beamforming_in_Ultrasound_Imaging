@@ -5,6 +5,7 @@
 #include <sstream>
 #include <cmath>
 #include <algorithm>
+
 using namespace std;
 
 float **createDataMatrix(int numElement, int numSample) {
@@ -21,9 +22,10 @@ int loadRFData(float **RFData, const char *fileName, int numElement, int numSamp
     // You can use the getline() command to extract the data lines from the txt files
     ifstream infile(fileName); //Opens file
 
-    if (infile.fail())  //Checks if file is open
+    if (infile.fail()) { //Checks if file is open
     	cerr << "Error: file not open.\n";
         return -1;
+    }
 
     const int MAX = 100;
     char line[100];
@@ -33,15 +35,25 @@ int loadRFData(float **RFData, const char *fileName, int numElement, int numSamp
     while (infile.getline(line, MAX)) {
         RFData[elementCounter][sampleCounter] = atof(line);
         sampleCounter++;
-        if (sampleCounter == numSample)
+        if (sampleCounter == numSample) // Every 3338 samples, element counter is increased by 1.
             elementCounter++;
     }
 }
-    
-// Create an array containing the depth location (in z-direction) for each pixel on the scanline
-float *genScanlineLocation(int &numPixel)
-{
 
+// Create an array containing the depth location (in z-direction) for each pixel on the scanline
+float *genScanlineLocation(int &numPixel) {
+    float depth;
+    int pixels;
+    cout << "Enter scanline depth (>0): ";
+    cin >> depth;
+    cout << "Enter the number of pixels: ";
+    cin >> pixels;
+
+    float* scanlineLocation[pixels];
+    scanlineLocation[0] = 0;
+    scanlineLocation[pixels - 1] = &depth;
+
+    return scanlineLocation[pixels];
 }
 
 // Create an array containing the element location (in x-direction) of the ultrasound transducer
