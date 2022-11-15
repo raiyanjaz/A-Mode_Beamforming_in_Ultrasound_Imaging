@@ -8,7 +8,8 @@
 using namespace std;
 
 float **createDataMatrix(int numElement, int numSample) {
-    float **RFData;
+    // Create a 2D data matrix of size numElement and numSample
+    float** RFData;
     RFData = new float*[numElement];
     for (int i = 0; i < numElement; i++)
         RFData[i] = new float[numSample];
@@ -16,17 +17,27 @@ float **createDataMatrix(int numElement, int numSample) {
 }
 
 int loadRFData(float **RFData, const char *fileName, int numElement, int numSample) {
-    ifstream infile("RealRFData.txt");
-    if 
-
-
-
-
-
-
     // Open the text file fileName, read the data and store into RFData
     // You can use the getline() command to extract the data lines from the txt files
-}
+    ifstream infile(fileName); //Opens file
+
+    if (infile.fail())  //Checks if file is open
+    	cerr << "Error: file not open.\n";
+        return -1;
+
+    const int MAX = 100;
+    char line[100];
+    
+    for (int i = 0; i <= numElement; i++) {
+        if (infile.getline(line, MAX)) {
+            for (int i2 = 0; i2 <= numSample; i++) {
+                float temp = atof(line);
+                RFData[i][i2] = temp;
+            }
+        }
+    }
+    
+
 
 // Create an array containing the depth location (in z-direction) for each pixel on the scanline
 float *genScanlineLocation(int &numPixel)
