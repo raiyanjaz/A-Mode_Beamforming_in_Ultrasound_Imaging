@@ -27,18 +27,17 @@ int loadRFData(float **RFData, const char *fileName, int numElement, int numSamp
 
     const int MAX = 100;
     char line[100];
-    
-    for (int i = 0; i <= numElement; i++) {
-        if (infile.getline(line, MAX)) {
-            for (int i2 = 0; i2 <= numSample; i++) {
-                float temp = atof(line);
-                RFData[i][i2] = temp;
-            }
-        }
+    int elementCounter = 0;
+    int sampleCounter = 0;
+
+    while (infile.getline(line, MAX)) {
+        RFData[elementCounter][sampleCounter] = atof(line);
+        sampleCounter++;
+        if (sampleCounter == numSample)
+            elementCounter++;
     }
+}
     
-
-
 // Create an array containing the depth location (in z-direction) for each pixel on the scanline
 float *genScanlineLocation(int &numPixel)
 {
