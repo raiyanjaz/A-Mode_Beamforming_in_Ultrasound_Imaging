@@ -62,9 +62,8 @@ float *genScanlineLocation(int &numPixel) {
 // Create an array containing the element location (in x-direction) of the ultrasound transducer
 float *genElementLocation(int numElement, float PITCH) {
     float eleLocation[numElement];
-    for (int n = 0; n <= numElement-1; n++) {
+    for (int n = 0; n <= numElement-1; n++) 
         eleLocation[n] = (n - ((numElement-1)/2)) * PITCH;
-    }
 }
 
 // Allocate memory to store the beamformed scanline
@@ -101,23 +100,16 @@ float *elementPosition, int numElement, int numSample, int numPixel, float FS, f
     for (int i = 0; i < numPixel; i++) {
         for (int k = 0; k < numElement; k++) {
             s[i][k] = floor(tTotal[i][k] * FS);
-            cout << s[i] << endl;
         }
     }
-
-
-
-
 }
 
 // Write the scanline to a csv file
-int outputScanline(const char *fileName, float *scanlinePosition, float *scanline, int numPixel)
-{
+int outputScanline(const char *fileName, float *scanlinePosition, float *scanline, int numPixel) {
     
 }
 
 // Destroy all the allocated memory
-void destroyAllArrays(float *scanline, float **realRFData, float **imagRFData, float *scanlinePosition, float *elementPosition, int numElement, int numSample, int numPixel)
-{
+void destroyAllArrays(float *scanline, float **realRFData, float **imagRFData, float *scanlinePosition, float *elementPosition, int numElement, int numSample, int numPixel) {
     
 }
