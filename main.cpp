@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Amode.h"
+#include "amode.h"
 
 using namespace std;
 
