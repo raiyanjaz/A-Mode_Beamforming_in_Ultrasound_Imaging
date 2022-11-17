@@ -64,19 +64,50 @@ float *genElementLocation(int numElement, float PITCH) {
     float eleLocation[numElement];
     for (int n = 0; n <= numElement-1; n++) {
         eleLocation[n] = (n - ((numElement-1)/2)) * PITCH;
-        cout << n << " : " << eleLocation[n] << endl;
     }
 }
 
 // Allocate memory to store the beamformed scanline
 float *createScanline(int numPixel) {
-    
+    float* scanline;
+    scanline = new float[numPixel];
+    return scanline;
 }
 
 // Beamform the A-mode scanline
-void beamform(float *scanline, float **realRFData, float **imagRFData, float *scanlinePosition, float *elementPosition, int numElement, int numSample, int numPixel, float FS, float SoS)
-{
+void beamform(float *scanline, float **realRFData, float **imagRFData, float *scanlinePosition, 
+float *elementPosition, int numElement, int numSample, int numPixel, float FS, float SoS) {
     
+    float tForward[numPixel];
+    float tBackward[numPixel][numElement];
+    float tTotal[numPixel][numElement];
+    float s[numPixel][numElement];
+
+    for (int i = 0; i < numPixel; i++) 
+        tForward[i] = (scanlinePosition[i] / SoS);
+    
+    for (int i = 0; i < numPixel; i++) {
+        for (int k = 0; k < numElement; k++) {
+            tBackward[i][k] = (sqrt(pow(scanlinePosition[i], 2) + pow(elementPosition[i], 2)) / SoS);
+        }
+    }
+
+    for (int i = 0; i < numPixel; i++) {
+        for (int k = 0; k < numElement; k++) {
+            tTotal[i][k] = tForward[i] + tBackward[i][k];
+        }
+    }
+
+    for (int i = 0; i < numPixel; i++) {
+        for (int k = 0; k < numElement; k++) {
+            s[i][k] = floor(tTotal[i][k] * FS);
+            cout << s[i] << endl;
+        }
+    }
+
+
+
+
 }
 
 // Write the scanline to a csv file
