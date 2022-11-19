@@ -80,31 +80,39 @@ float *elementPosition, int numElement, int numSample, int numPixel, float FS, f
     float tForward[numPixel];
     float tBackward[numPixel][numElement];
     float tTotal[numPixel][numElement];
-    int s[numPixel][numElement];
-    
+    int sampleS[numPixel][numElement];
+
     for (int i = 0; i < numPixel; i++) {
         tForward[i] = (scanlinePosition[i] / SoS);
         for (int k = 0; k < numElement; k++) {
             tBackward[i][k] = (sqrt(pow(scanlinePosition[i], 2) + pow(elementPosition[i], 2)) / SoS);
             tTotal[i][k] = tForward[i] + tBackward[i][k];
-            s[i][k] = floor(tTotal[i][k] * FS);
+            sampleS[i][k] = floor(tTotal[i][k] * FS);
         }
     }
 
     float pReal[numPixel];
+    float pImag[numPixel];
     int sum = 0;
-    int* ptr = s;
 
     for (int i = 0; i < numPixel; i++) {
         for (int k = 0; k < numElement; k++) {
-            int* test = *(s+i);
-            sum += realRFData[k][test];
+            int* test = *(sampleS+i)+k;
+            sum += realRFData[k][*test];
         }
         pReal[i] = sum;
         sum = 0;
     }
 
-
+    for (int i = 0; i < numPixel; i++) {
+        for (int k = 0; k < numElement; k++) {
+            int* test = *(sampleS+i)+k;
+            sum += imagRFData[k][*test];
+        }
+        pImag[i] = sum;
+        sum = 0;
+    }
+    
 }
 
 // Write the scanline to a csv file
