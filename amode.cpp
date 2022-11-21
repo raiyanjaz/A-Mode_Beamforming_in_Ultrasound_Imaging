@@ -93,30 +93,35 @@ float *elementPosition, int numElement, int numSample, int numPixel, float FS, f
 
     float pReal[numPixel];
     float pImag[numPixel];
+    float mag[numPixel];
     int sum = 0;
+    int sum2 = 0;
 
     for (int i = 0; i < numPixel; i++) {
         for (int k = 0; k < numElement; k++) {
             int* test = *(sampleS+i)+k;
             sum += realRFData[k][*test];
+            sum2 += imagRFData[k][*test];
         }
         pReal[i] = sum;
+        pImag[i] = sum2;
         sum = 0;
-    }
-
-    for (int i = 0; i < numPixel; i++) {
-        for (int k = 0; k < numElement; k++) {
-            int* test = *(sampleS+i)+k;
-            sum += imagRFData[k][*test];
-        }
-        pImag[i] = sum;
-        sum = 0;
-    }
+        mag[i] = sqrt(pow(pReal[i], 2) + pow(pImag[i] , 2));
+    }    
 }
 
 // Write the scanline to a csv file
 int outputScanline(const char *fileName, float *scanlinePosition, float *scanline, int numPixel) {
-    
+    ofstream fout(fileName); // Creates the file name as mentioned in main.cpp
+
+    if (fout.fail()) { // Returns -1 to main if file was not created
+        return -1;
+    }
+
+    for (int i = 0; i < numPixel; i++) {
+        fout << scanlinePosition[i] << endl;
+    }
+
 }
 
 // Destroy all the allocated memory
