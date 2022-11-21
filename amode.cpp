@@ -84,10 +84,8 @@ void beamform(float *scanline, float **realRFData, float **imagRFData, float *sc
     // Declare variables to be used later
     float tForward;
     float tBackward;
-
     float tTotal[numPixel][numElement];
     int sampleS[numPixel][numElement];
-
     float pReal[numPixel];
     float pImag[numPixel];
 
@@ -103,7 +101,8 @@ void beamform(float *scanline, float **realRFData, float **imagRFData, float *sc
             pImag[i] += imagRFData[k][sampleS[i][k]];
         }
         scanline[i] = sqrt(pow(pReal[i], 2) + pow(pImag[i] , 2)); // Stores the echo magnitude at ith scanline location
-    }  
+        cout << i << ": " << scanline[i] << endl;
+    } 
 }
 
 int outputScanline(const char *fileName, float *scanlinePosition, float *scanline, int numPixel) {
