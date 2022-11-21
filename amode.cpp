@@ -31,22 +31,15 @@ int loadRFData(float **RFData, const char *fileName, int numElement, int numSamp
     char line[100];
     int elementCounter = 0; // Counters to be used in the while loop
     int sampleCounter = 0;
-
-    for (int i = 0; i < numElement; i++) {
-        for (int j = 0; j < numSample; j++) {
-            fin.getline(line, MAX);
-            RFData[i][j] = atof(line);
-        }
-    }
-    
-    /* while (fin.getline(line, MAX)) { // Runs until end of file (EOF) returns false
+   
+    while (fin.getline(line, MAX)) { // Runs until end of file (EOF) returns false
         RFData[elementCounter][sampleCounter] = atof(line); // Converts char array to float and stores in RFData
         sampleCounter++;
         if (sampleCounter == numSample) { // Every 3338 samples, element counter is increased by 1.
             elementCounter++;
             sampleCounter = 0;
         }
-    } */
+    }
 
     fin.close(); // Closes file
 }
@@ -95,15 +88,13 @@ void beamform(float *scanline, float **realRFData, float **imagRFData, float *sc
     float tTotal[numPixel][numElement];
     int sampleS[numPixel][numElement];
 
-    float* pReal;
-    pReal = new float[numPixel]; // Allocates an block of elements with size numPixel of type float
-    float* pImag;
-    pImag = new float[numPixel]; // Allocates an block of elements with size numPixel of type float
-    int sum = 0;
-    int sum2 = 0;
+    float pReal[numPixel];
+    float pImag[numPixel];
 
     for (int i = 0; i < numPixel; i++) {
         tForward = scanlinePosition[i] / SoS; // Each element in scanlinePositon is divided by speed of sound and stored
+        pReal[i] = 0;
+        pImag[i] = 0;
         for (int k = 0; k < numElement; k++) {
             tBackward = sqrt(pow(scanlinePosition[i], 2) + pow(elementPosition[i], 2)) / SoS;
             tTotal[i][k] = tForward + tBackward;
@@ -118,13 +109,14 @@ void beamform(float *scanline, float **realRFData, float **imagRFData, float *sc
 int outputScanline(const char *fileName, float *scanlinePosition, float *scanline, int numPixel) {
     // Write the scanline to a csv file
 
-    ofstream fout(fileName); // Creates file that is named in main
-    if (fout.fail()) // Returns -1 to main if file was not created
+    ofstream fout; // Creates file that is named in main
+    fout.open(fileName);
+
+    if (!fout.good()) // Returns -1 to main if file was not created
         return -1;
     
-    for (int i = 0; i < numPixel; i++) { 
+    for (int i = 0; i < numPixel; i++)
         fout << scanlinePosition[i] << "," << scanline[i] << endl; // Outputs elements of scanlinePositon and scanline
-    }
     fout.close(); // Closes output file
 
     return 0;
