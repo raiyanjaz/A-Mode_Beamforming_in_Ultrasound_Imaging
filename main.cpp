@@ -20,12 +20,12 @@ int main () {
     int result = 0;
 
     //Use this section to input the data from the txt files. 
-    result = loadRFData(realRFData, "RealRFData.txt", N, K);
+    result = loadRFData(realRFData, "RealRFData_mystery.txt", N, K);
     if (result == -1) {
         cerr << "Cannot load from realRFData.txt, exiting program" << endl;
         return -1;
     }
-    result = loadRFData(imagRFData, "ImagRFData.txt",N, K);
+    result = loadRFData(imagRFData, "ImagRFData_mystery.txt",N, K);
     if (result == -1) {
         cerr << "Cannot load from imagRFData.txt, exiting program" << endl;
         return -1;

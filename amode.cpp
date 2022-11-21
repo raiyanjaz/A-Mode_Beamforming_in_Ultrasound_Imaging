@@ -94,14 +94,13 @@ void beamform(float *scanline, float **realRFData, float **imagRFData, float *sc
         pReal[i] = 0;
         pImag[i] = 0;
         for (int k = 0; k < numElement; k++) {
-            tBackward = sqrt(pow(scanlinePosition[i], 2) + pow(elementPosition[i], 2)) / SoS;
+            tBackward = sqrt(pow(scanlinePosition[i], 2) + pow(elementPosition[k], 2)) / SoS;
             tTotal[i][k] = tForward + tBackward;
             sampleS[i][k] = floor(tTotal[i][k] * FS); // Turns every element in tTotal into an integer to be stored in sampleS
             pReal[i] += realRFData[k][sampleS[i][k]]; // Values in both arrays are added and stored into pReal and pImag
             pImag[i] += imagRFData[k][sampleS[i][k]];
         }
         scanline[i] = sqrt(pow(pReal[i], 2) + pow(pImag[i] , 2)); // Stores the echo magnitude at ith scanline location
-        cout << i << ": " << scanline[i] << endl;
     } 
 }
 
