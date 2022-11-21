@@ -80,26 +80,27 @@ float *createScanline(int numPixel) {
 void beamform(float *scanline, float **realRFData, float **imagRFData, float *scanlinePosition, float *elementPosition, int numElement, int numSample, int numPixel, float FS, float SoS) {
     // Beamform the A-mode scanline
     
-    // Declare 4 arrays to be used below
-    float tForward[numPixel];
-    float tBackward[numPixel][numElement];
+    // Declare variables to be used later
+    float tForward;
+    float tBackward;
     float tTotal[numPixel][numElement];
     int sampleS[numPixel][numElement];
 
+    float* pReal;
+    pReal = new float[numPixel]; // Allocates an block of elements with size numPixel of type float
+    float* pImag;
+    pImag = new float[numPixel]; // Allocates an block of elements with size numPixel of type float
+    int sum = 0;
+    int sum2 = 0;
+
     for (int i = 0; i < numPixel; i++) {
-        tForward[i] = (scanlinePosition[i] / SoS); // Each element in scanlinePositon is divided by speed of sound and stored
+        tForward = (scanlinePosition[i] / SoS); // Each element in scanlinePositon is divided by speed of sound and stored
         for (int k = 0; k < numElement; k++) {
-            tBackward[i][k] = (sqrt(pow(scanlinePosition[i], 2) + pow(elementPosition[i], 2)) / SoS);
-            tTotal[i][k] = tForward[i] + tBackward[i][k];
+            tBackward = (sqrt(pow(scanlinePosition[i], 2) + pow(elementPosition[i], 2)) / SoS);
+            tTotal[i][k] = tForward + tBackward;
             sampleS[i][k] = floor(tTotal[i][k] * FS); // Turns every element in tTotal into an integer to be stored in sampleS
         }
     }
-
-    // Declare variables to be used later
-    float pReal[numPixel];
-    float pImag[numPixel];
-    int sum = 0;
-    int sum2 = 0;
 
     for (int i = 0; i < numPixel; i++) { // Nested for loop to solve for sum and sum2 at all i and k iterations
         for (int k = 0; k < numElement; k++) {
@@ -109,6 +110,7 @@ void beamform(float *scanline, float **realRFData, float **imagRFData, float *sc
         pReal[i] = sum;
         pImag[i] = sum2;
         sum = 0; // Reset sum for next iteration
+        sum2 = 0;
         scanline[i] = sqrt(pow(pReal[i], 2) + pow(pImag[i] , 2)); // Stores the echo magnitude at ith scanline location
     }    
 }
@@ -116,9 +118,7 @@ void beamform(float *scanline, float **realRFData, float **imagRFData, float *sc
 int outputScanline(const char *fileName, float *scanlinePosition, float *scanline, int numPixel) {
     // Write the scanline to a csv file
 
-    ofstream fout; // Creates file that is named in main
-    fout.open(fileName);
-
+    ofstream fout(fileName); // Creates file that is named in main
     if (fout.fail()) // Returns -1 to main if file was not created
         return -1;
     
